@@ -217,6 +217,7 @@ def replace_some_terms(raw_lines):
 
 
 def read_header(header_path):
+    print(header_path)
     # I tried to do this in multiple threads but it seems like CppHeaderParser is not thread safe...
     try:
         header_file_str = replace_some_terms(open(header_path, encoding="utf8").readlines())
@@ -325,8 +326,8 @@ def flag_instantiatable_class(dependency_tree, main_classes):
 
 
 def load_yaml_point_types(not_every_point_type):
-    classes_point_types = unpack_yaml_point_types("point_types_generated.yml", not_every_point_type)
-    extra_point_types = unpack_yaml_point_types("point_types_extra.yml")
+    classes_point_types = unpack_yaml_point_types("./generators/point_types_generated.yml", not_every_point_type)
+    extra_point_types = unpack_yaml_point_types("./generators/point_types_extra.yml")
     for k, v in extra_point_types.items():
         if k in classes_point_types:
             classes_point_types[k].append(v)

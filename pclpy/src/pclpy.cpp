@@ -27,7 +27,7 @@ using namespace pybind11::literals;
 using namespace pcl;
 
 template <typename T>
-void definePointCloudBuffers(py::module &m, const char* suffix) {
+void definePointCloudBuffers(py::object &m, const char* suffix) {
     using PointCloud = pcl::PointCloud<T>;
     using Type = py::class_<PointCloud, boost::shared_ptr<PointCloud>>;
     auto pc = static_cast<Type>(m.attr(suffix));
@@ -37,7 +37,7 @@ void definePointCloudBuffers(py::module &m, const char* suffix) {
 }
 
 template <typename T>
-void definePointCloudBuffersRGB(py::module &m, const char* suffix) {
+void definePointCloudBuffersRGB(py::object &m, const char* suffix) {
     using PointCloud = pcl::PointCloud<T>;
     using Type = py::class_<PointCloud, boost::shared_ptr<PointCloud>>;
     auto pc = static_cast<Type>(m.attr(suffix));
@@ -57,7 +57,7 @@ PYBIND11_MODULE(pcl, m) {
 
     defineClasses(m);
 
-    py::module pc = m.attr("PointCloud");
+    py::object pc = m.attr("PointCloud");
     definePointCloudBuffers<PointXYZ>(pc, "PointXYZ");
     definePointCloudBuffers<PointXYZI>(pc, "PointXYZI");
     definePointCloudBuffers<PointXYZL>(pc, "PointXYZL");

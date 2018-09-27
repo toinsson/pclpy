@@ -41,7 +41,7 @@ class Constructor:
             class_typedefs = param["method"]["parent"]["typedefs"]["public"]
             custom = CUSTOM_OVERLOAD_TYPES.get((param["method"]["parent"]["name"], type_))
             if custom:
-                type_ = custom
+                type_ = "typename "+custom
             elif param.get("enum"):
                 type_ = "Class::%s" % param.get("enum").split("::")[-1]
             elif type_only_last_element in class_typedefs:

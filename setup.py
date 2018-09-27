@@ -27,7 +27,9 @@ AUTHOR = 'David Caron'
 REQUIRES_PYTHON = '==3.6.*'
 VERSION = None
 
-PCL_ROOT = os.getenv("PCL_ROOT")
+
+
+PCL_ROOT = "/usr/local/Cellar/pcl/1.8.1_4/" #os.getenv("PCL_ROOT")
 PYTHON_HOME = os.path.split(sys.executable)[0]
 INCLUDE = join(PYTHON_HOME, r"Library", "include")
 LIB_DIR = join(PYTHON_HOME, r"Library", "lib")
@@ -173,7 +175,7 @@ class BuildExt(build_ext):
 
 ext_args = defaultdict(list)
 
-if ON_WINDOWS:
+if True:
     def compile(self, sources,
                 output_dir=None, macros=None, include_dirs=None, debug=0,
                 extra_preargs=None, extra_postargs=None, depends=None):
@@ -286,20 +288,27 @@ if ON_WINDOWS:
 
 
     # monkey-patch msvc compiler for faster windows builds
-    from distutils._msvccompiler import MSVCCompiler
+    # from distutils._msvccompiler import MSVCCompiler
 
-    MSVCCompiler.compile = compile
-    MSVCCompiler.compile_single = compile_single
+    # MSVCCompiler.compile = compile
+    # MSVCCompiler.compile_single = compile_single
 
     ext_args['include_dirs'].append(numpy.get_include())
 
     inc_dirs = [join(PCL_ROOT, "include", "pcl-1.8"),
+
+                "/usr/local/Cellar/eigen/3.3.5/include/eigen3",
+                "/usr/local/Cellar/vtk/8.1.1_1/include/vtk-8.1",
+                "/usr/local/Cellar/boost/1.67.0_1/include/",
+
                 join(PCL_ROOT, "3rdParty", "Eigen", "eigen3"),
                 join(PCL_ROOT, "3rdParty", "Boost", "include", "boost-1_64"),
                 join(PCL_ROOT, "3rdParty", "FLANN", "include"),
                 join(PCL_ROOT, "3rdParty", "Qhull", "include"),
                 join(INCLUDE, "vtk-8.1"),
                 INCLUDE,
+                "/Users/antoine/Documents/owndev/pclpy/pclpy/src/",
+                "/Users/antoine/Documents/owndev/pclpy/src/",
                 ]
 
     ext_args['include_dirs'] += inc_dirs
@@ -327,10 +336,10 @@ if ON_WINDOWS:
     #     if lib.endswith("vc140-mt-1_64.lib"):
     #         ext_args['libraries'].append(lib[:-4])
 
-    for lib in os.listdir(LIB_DIR):
-        endswith = "D-8.1.lib" if DEBUG else "-8.1.lib"
-        if lib.endswith(endswith):
-            ext_args['libraries'].append(lib[:-4])
+    # for lib in os.listdir(LIB_DIR):
+    #     endswith = "D-8.1.lib" if DEBUG else "-8.1.lib"
+    #     if lib.endswith(endswith):
+    #         ext_args['libraries'].append(lib[:-4])
 
     win_opengl_libdirs = ['C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v8.1A\\Lib\\x64']
 
@@ -345,7 +354,7 @@ if ON_WINDOWS:
     ext_args['include_dirs'].append(get_pybind_include())
     ext_args['include_dirs'].append(get_pybind_include(user=True))
 
-modules_path = "pclpy/src/generated_modules/"
+modules_path = "./src/generated_modules/"
 
 loaders = [join(modules_path, f) for f in os.listdir(modules_path)
            if f.endswith("_loader.cpp") and not f == "__main_loader.cpp"]

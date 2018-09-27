@@ -99,7 +99,7 @@ class ClassDefinition:
                 templated_name = "{name}<%s>;" % types
                 a("{ind}{i}using Class = {namespace}%s" % templated_name)
                 for typedef in self.typedefs():
-                    a("{ind}{i}using {typedef} = Class::{typedef};".format(ind=ind, i=i, typedef=typedef))
+                    a("{ind}{i}using {typedef} = typename Class::{typedef};".format(ind=ind, i=i, typedef=typedef))
                 a(self.py_class_definition(ind=ind + i) + "\n{ind}{i}{i}")
                 a("{cb}")
         if not self.is_templated:
@@ -107,7 +107,7 @@ class ClassDefinition:
             a("{ind}void define{sub}{name}(py::module &m) {ob}")
             a("{ind}{i}using Class = {namespace}{name}{empty_template};")
             for typedef in self.typedefs():
-                a("{ind}{i}using %s = Class::%s;" % (typedef, typedef))
+                a("{ind}{i}using %s = typename Class::%s;" % (typedef, typedef))
             a(self.py_class_definition(ind=ind + i))
             a("{cb}")
         data = {
@@ -129,9 +129,12 @@ class ClassDefinition:
         class_enums_names = [v["name"] for e in self.enums for v in e.cppenum["values"]]
         s = ["{ind}%s;" % self.to_str()]
         s += ["{ind}%s;" % enum.to_str("Class", class_var_name=self.CLS_VAR) for enum in self.enums]
+
         s += ["{ind}%s;" % c.to_str(class_var_name=self.CLS_VAR, class_enums_names=class_enums_names)
               for c in self.constructors]
+
         s += ["{ind}%s;" % v.to_str("Class", class_var_name=self.CLS_VAR) for v in self.variables]
+
         templated_methods = [m for m in self.other_methods if m.templated_types]
         s += ["{ind}%s;" % m.to_str("Class", class_var_name=self.CLS_VAR) for m in self.other_methods
               if not m in templated_methods]

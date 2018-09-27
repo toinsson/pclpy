@@ -4,7 +4,9 @@ from os.path import join
 INDENT = " " * 4
 BASE_SUB_MODULE_NAME = "sub_module"
 
-PCL_BASE = join(os.environ["PCL_ROOT"], "include\pcl-1.8\pcl")
+os.environ["PCL_ROOT"] = "/usr/local/Cellar/pcl/1.8.1_4/"
+
+PCL_BASE = join(os.environ["PCL_ROOT"], "include/pcl-1.8/pcl")
 PATH_SRC = join("..", "pclpy", "src")
 PATH_MAIN_CPP = join(PATH_SRC, "pclpy.cpp")
 PATH_MODULES = join(PATH_SRC, "generated_modules")
@@ -24,7 +26,7 @@ using namespace pybind11::literals;
 
 cpp_header = """
 PYBIND11_DECLARE_HOLDER_TYPE(T, boost::shared_ptr<T>);
-#include "../make_opaque_vectors.hpp"
+#include "make_opaque_vectors.hpp"
 """
 
 # ----------------------
